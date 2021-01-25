@@ -34,7 +34,7 @@ class Person:
 
         return self.hp
 
-    def head(self, dmg):
+    def heal(self, dmg):
         self.hp += dmg
         if self.hp > self.maxhp:
             self.hp = self.maxhp
