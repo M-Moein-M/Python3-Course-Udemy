@@ -26,7 +26,12 @@ gerenade = Item('Grenade', 'attack', 'Deals 500 damage', 500)
 
 # instantiate people
 player_spells = [fire, thunder, blizzard, meteor, quake, cure, cura]
-player_items = [potion, hipotion, superpotion, elixir, megaelixir, gerenade]
+player_items = [{'item': potion, 'quantity': 5},
+                {'item': hipotion, 'quantity': 5},
+                {'item': superpotion, 'quantity': 5},
+                {'item': elixir, 'quantity': 5},
+                {'item': megaelixir, 'quantity': 5},
+                {'item': gerenade, 'quantity': 1}]
 player = Person(460, 65, 60, 34, player_spells, player_items)
 enemy = Person(1200, 65, 45, 25, [], [])
 
@@ -38,6 +43,8 @@ while running:
     player.choose_action()
 
     choice = input('Choose Action: ')
+    if not choice.isnumeric():
+        continue
     index = int(choice)-1
 
     if index == 0:  # attack
@@ -79,11 +86,25 @@ while running:
         if item_choice == -1:
             continue
 
-        item = player.items[item_choice]
+        item = player.get_item(item_choice)
+
+        # reduce quantity by one
+        if not player.use_item(item_choice):
+            print(f'{bcolors.FAIL}\nYou already used all of this item...{bcolors.ENDC}')
+            continue
 
         if item.type == 'potion':
             player.heal(item.prop)
             print(bcolors.OKGREEN + f'\n{item.name} heals {item.prop} points of HP' + bcolors.ENDC)
+
+        elif item.type == 'elixir':
+            player.heal(player.get_max_hp())  # fully heal player
+            player.add_mp(player.get_max_mp())  # fully restore mp
+            print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP{bcolors.ENDC}')
+
+        elif item.type == 'attack':
+            enemy.take_damage(item.prop)
+            print(f'{bcolors.FAIL}\n{item.name} deals {item.prop} points of damage{bcolors.ENDC}')
 
     else:  # invalid choice
         continue
