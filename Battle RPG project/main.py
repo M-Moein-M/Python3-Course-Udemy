@@ -1,5 +1,6 @@
 from classes.game import bcolors, Person
 from classes.magic import Spell
+from classes.inventory import Item
 
 
 # create black magic
@@ -13,10 +14,21 @@ quake = Spell('Quake', 14, 140, 'black')
 cure = Spell('Cure', 12, 120, 'white')
 cura = Spell('Cura', 18, 200, 'white')
 
+# create items
+potion = Item('Potion', 'potion', 'Heals 50 HP', 50)
+hipotion = Item('Hipotion', 'potion', 'Heals 100 HP', 100)
+superpotion = Item('Super Potion', 'potion', 'Heals 500 HP', 500)
+elixir = Item('Elixir', 'elixir', 'Fully restores HP/MP of one party member', 99999)
+megaelixir = Item('MegaElixir', 'elixir', "Fully restores party's HP/MP", 99999)
+
+gerenade = Item('Grenade', 'attack', 'Deals 500 damage', 500)
+
 
 # instantiate people
-player = Person(460, 65, 60, 34, [fire, thunder, blizzard, meteor, quake, cure, cura])
-enemy = Person(1200, 65, 45, 25, [])
+player_spells = [fire, thunder, blizzard, meteor, quake, cure, cura]
+player_items = [potion, hipotion, superpotion, elixir, megaelixir, gerenade]
+player = Person(460, 65, 60, 34, player_spells, player_items)
+enemy = Person(1200, 65, 45, 25, [], [])
 
 print(bcolors.FAIL + bcolors.BOLD + 'ENEMY ATTACKS!' + bcolors.ENDC)
 
@@ -32,9 +44,14 @@ while running:
         dmg = player.generate_damage()
         enemy.take_damage(dmg)
         print(f'You attacked for {dmg} points of damage.')
+
     elif index == 1:  # magic
         player.choose_magic()
         magic_choice = int(input('Choose Magic: ')) - 1
+
+        # if player enters 0 we go back to menu
+        if magic_choice == -1:
+            continue
 
         spell = player.magic[magic_choice]
         magic_dmg = spell.generate_damage()
@@ -53,6 +70,20 @@ while running:
         elif spell.type == 'black':  # damage
             enemy.take_damage(magic_dmg)
             print(bcolors.OKBLUE + f'\n{spell.name} deals {magic_dmg} points of damage' + bcolors.ENDC)
+
+    elif index == 2:  # item
+        player.choose_item()
+        item_choice = int(input('Choose Item: ')) - 1
+
+        # if player enters 0 we go back to menu
+        if item_choice == -1:
+            continue
+
+        item = player.items[item_choice]
+
+        if item.type == 'potion':
+            player.heal(item.prop)
+            print(bcolors.OKGREEN + f'\n{item.name} heals {item.prop} points of HP' + bcolors.ENDC)
 
     else:  # invalid choice
         continue
