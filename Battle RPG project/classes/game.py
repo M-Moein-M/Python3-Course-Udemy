@@ -40,6 +40,11 @@ class Person:
         if self.hp > self.maxhp:
             self.hp = self.maxhp
 
+    def add_mp(self, mp):
+        self.mp += mp
+        if self.mp > self.maxmp:
+            self.mp = self.maxmp
+
     def get_hp(self):
         return self.hp
 
@@ -56,6 +61,16 @@ class Person:
         self.mp -= cost
         if self.mp < 0:
             self.mp = 0
+
+    def get_item(self, index):
+        return self.items[index]['item']
+
+    def use_item(self, index):  # reduce item quantity by one and return True. Return False if item quantity was 0
+        if self.items[index]['quantity'] == 0:
+            return False
+        else:
+            self.items[index]['quantity'] -= 1
+            return True
 
     # actions
     def choose_action(self):
@@ -76,5 +91,6 @@ class Person:
         i = 1
         print(bcolors.OKGREEN + bcolors.BOLD + '\nITEMS' + bcolors.ENDC + '(enter 0 to go back to menu)')
         for item in self.items:
-            print(f'\t{i}. {item.name}: {item.description}')
+            item, quantity = item['item'], item['quantity']
+            print(f'\t{i}. {item.name}(x{quantity}): {item.description}')
             i += 1
