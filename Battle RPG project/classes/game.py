@@ -1,4 +1,5 @@
 import random
+import math
 
 
 class bcolors:
@@ -13,7 +14,8 @@ class bcolors:
 
 
 class Person:
-    def __init__(self, hp, mp, atk, df, magic, items):
+    def __init__(self, name, hp, mp, atk, df, magic, items):
+        self.name = name
         self.items = items
         self.maxhp = hp
         self.hp = hp
@@ -94,3 +96,18 @@ class Person:
             item, quantity = item['item'], item['quantity']
             print(f'\t{i}. {item.name}(x{quantity}): {item.description}')
             i += 1
+
+    def get_stats(self):
+        inspace = 20  # line initial space
+        hp_bars = 25
+        mp_bars = 15
+
+        p_hp_bars = math.ceil(self.get_hp()/self.get_max_hp()*hp_bars)  # number of player hp bars to show
+        p_mp_bars = math.ceil(self.get_mp()/self.get_max_mp()*mp_bars)  # number of player mp bars to show
+
+        return f"{bcolors.BOLD}{self.name[:inspace]}" \
+            f"{(inspace-len(self.name))*' ' if len(self.name) < inspace else ''}" \
+            f"  {self.get_hp()}/{self.get_max_hp()} |{p_hp_bars*'█'}" \
+            f"{(hp_bars-p_hp_bars)*' '}|" \
+            f"  {self.get_mp()}/{self.get_max_mp()} |{p_mp_bars*'█'}" \
+            f"{(mp_bars-p_mp_bars)*' '}|"
