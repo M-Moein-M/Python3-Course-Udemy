@@ -32,14 +32,18 @@ player_items = [{'item': potion, 'quantity': 5},
                 {'item': elixir, 'quantity': 5},
                 {'item': megaelixir, 'quantity': 5},
                 {'item': gerenade, 'quantity': 1}]
-player = Person(460, 65, 60, 34, player_spells, player_items)
-enemy = Person(1200, 65, 45, 25, [], [])
 
-print(bcolors.FAIL + bcolors.BOLD + 'ENEMY ATTACKS!' + bcolors.ENDC)
+player = Person('Valos', 460, 65, 60, 34, player_spells, player_items)
+
+enemy = Person('Enemy', 1200, 65, 45, 25, [], [])
 
 running = True
 while running:
-    print(40*'=')
+    print(40*'=', '\n\n')
+    # print HP and MP
+    print(f'{bcolors.OKGREEN}{player.get_stats()}{bcolors.ENDC}')
+    print(f'{bcolors.FAIL}{enemy.get_stats()}{bcolors.ENDC}\n')
+
     player.choose_action()
 
     choice = input('Choose Action: ')
@@ -115,12 +119,6 @@ while running:
         dmg = enemy.generate_damage()
         player.take_damage(dmg)
         print(f'Enemy attacked for {dmg} points of damage.')
-
-    # print HP
-    print(40*'-')
-    print(f'{bcolors.FAIL}Enemy HP: {enemy.get_hp()}/{enemy.get_max_hp()}{bcolors.ENDC}\n')
-    print(f'{bcolors.OKGREEN}Player HP: {player.get_hp()}/{player.get_max_hp()}{bcolors.ENDC}')
-    print(f'{bcolors.OKBLUE}Your MP: {player.get_mp()}/{player.get_max_mp()}{bcolors.ENDC}\n')
 
     if enemy.get_hp() == 0:
         print(bcolors.OKGREEN + 'You win!' + bcolors.ENDC)
