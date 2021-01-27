@@ -77,7 +77,7 @@ class Person:
     # actions
     def choose_action(self):
         i = 1
-        print(bcolors.OKBLUE + bcolors.BOLD + '\nACTIONS' + bcolors.ENDC)
+        print(bcolors.OKBLUE + bcolors.BOLD + f'\nACTIONS({self.name})' + bcolors.ENDC)
         for item in self.actions:
             print(f'\t{i}. {item}')
             i += 1
