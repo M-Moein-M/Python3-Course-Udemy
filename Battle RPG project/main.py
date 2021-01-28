@@ -1,3 +1,4 @@
+import random
 from classes.game import bcolors, Person
 from classes.magic import Spell
 from classes.inventory import Item
@@ -132,8 +133,17 @@ while running:
         enemy_choice = 1
         if enemy_choice == 1:  # always true for now
             dmg = enemy.generate_damage()
-            player.take_damage(dmg)
-            print(f'Enemy attacked for {dmg} points of damage.')
+
+            multi_shot = random.randrange(0, 2)  # generate 0 or 1 for multi shot attack
+            if multi_shot == 1:  # do a multi shot
+                for p in players:
+                    p.take_damage(dmg)
+
+                print(f'{bcolors.FAIL}Enemy attacked a multishot to all players for {dmg} points of damage{bcolors.ENDC}')
+
+            elif multi_shot == 0:
+                player.take_damage(dmg)
+                print(f'{bcolors.FAIL}Enemy attacked {player.name} for {dmg} points of damage{bcolors.ENDC}')
 
         if enemy.get_hp() == 0:
             print(bcolors.OKGREEN + 'You win!' + bcolors.ENDC)
