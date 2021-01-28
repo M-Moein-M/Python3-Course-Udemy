@@ -109,9 +109,17 @@ while running:
                 print(bcolors.OKGREEN + f'\n{item.name} heals {item.prop} points of HP' + bcolors.ENDC)
 
             elif item.type == 'elixir':
-                player.heal(player.get_max_hp())  # fully heal player
-                player.add_mp(player.get_max_mp())  # fully restore mp
-                print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP{bcolors.ENDC}')
+                if item.name == 'MegaElixir':
+                    for p in players:  # fully restore all of party members HP/MP
+                        p.heal(p.get_max_hp())
+                        p.add_mp(p.get_max_mp())
+
+                    print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP for all party members{bcolors.ENDC}')
+
+                elif item.name == 'Elixir':
+                    player.heal(player.get_max_hp())  # fully heal player
+                    player.add_mp(player.get_max_mp())  # fully restore mp
+                    print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP{bcolors.ENDC}')
 
             elif item.type == 'attack':
                 enemy.take_damage(item.prop)
